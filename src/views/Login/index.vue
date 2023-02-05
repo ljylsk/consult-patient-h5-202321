@@ -5,7 +5,7 @@ import { mobileRules, passwordRules, codeRules } from '@/utils/rules'
 import { showSuccessToast, showToast, type FormInstance } from 'vant'
 // 按需导入密码登录接口、发送验证码接口、短信验证码登录接口
 import { loginByPassword, sendMobileCode, loginByCode } from '@/services/user'
-// 按需导入仓库中用户信息函数
+// 按需导入用户状态仓库
 import { useUserStore } from '@/stores'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -16,6 +16,7 @@ const show = ref(false)
 // 定义表单项手机号和密码的响应式数据
 const mobile = ref('')
 const password = ref('')
+// 用户状态
 const store = useUserStore()
 // 路由实例
 const router = useRouter()

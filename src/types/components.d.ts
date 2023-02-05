@@ -1,4 +1,4 @@
-// 给components文件夹下的全局通用组件，设置TS类型
+// 给src/components文件夹下的全局通用组件，设置TS类型
 
 // 导入组件实例/对象
 import CpNavBar from '@/components/CpNavBar.vue'

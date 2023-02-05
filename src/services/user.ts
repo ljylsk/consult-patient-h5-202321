@@ -1,6 +1,9 @@
 // 用户相关的接口请求函数
+
+// 按需导入TS类型
 import type { CodeType, User } from '@/types/user'
 import { request } from '@/utils/request'
+
 // 密码登录接口
 export const loginByPassword = (mobile: string, password: string) =>
   request<User>('login/password', 'post', { mobile, password })

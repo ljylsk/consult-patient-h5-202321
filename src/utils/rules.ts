@@ -23,7 +23,7 @@ const passwordRules: FieldRule[] = [
 // 短信验证码
 const codeRules = [
   { required: true, message: '验证码不能为空' },
-  { pattern: /^\d{6}$/, message: '验证码是6个数字' }
+  { pattern: /^\d{6}$/, message: '验证码为6位数字' }
 ]
 
 // 按需导出

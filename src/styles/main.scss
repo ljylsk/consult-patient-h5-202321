@@ -21,7 +21,7 @@
   --van-primary-color: var(--cp-primary); // var()是固定格式
   // 应用二：修改各个组件内除vant组件的其他标签的css变量(各种颜色)，详见各个组件的style标签内的样式
 
-  // Vant 4 主题定制：修改样式变量的值 => 自定义样式
+  // Vant 4 组件的主题定制：修改样式变量的值 => 自定义样式
   // Vant 4 组件 Cell 单元格
   --van-cell-vertical-padding: 14px; // 单元格上下间距
   // Vant 4 组件 Checkbox 复选框
