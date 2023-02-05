@@ -14,7 +14,7 @@ pinia.use(persist)
 export default pinia
 
 // 完整写法
-import { useUserStore } from './user'
-export { useUserStore }
+// import { useUserStore } from './user'
+// export { useUserStore }
 // 统一导出
 export * from './user'
