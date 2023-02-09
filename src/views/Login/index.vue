@@ -16,7 +16,7 @@ const show = ref(false)
 // 定义表单项手机号和密码的响应式数据
 const mobile = ref('')
 const password = ref('')
-// 用户状态
+// 用户的pinia状态
 const store = useUserStore()
 // 路由实例
 const router = useRouter()
