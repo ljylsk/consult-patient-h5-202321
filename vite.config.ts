@@ -17,7 +17,7 @@ export default defineConfig({
   plugins: [
     // 解析单文件组件的插件
     vue(),
-    // 自动导入组件的插件 解析器可以是 vant element and-vue等等 ！且自动导入components文件夹下的组件，不需import ~ 直接使用
+    // 自动导入组件的插件 解析器可以是 vant element and-vue等等 且自动导入src/components文件夹下的组件，不需import ~ 直接使用
     Components({
       dts: false, // 默认是 true 开启自动生成组件的类型声明文件，vant组件已经有类型声明文件，只要导入了就会使用类型声明
       resolvers: [VantResolver({ importStyle: false })] // 在main.ts文件中已经引入了vant组件库的所有样式，不需要自动导入vant组件样式，只需要自动导入vant组件即可

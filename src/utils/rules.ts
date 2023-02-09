@@ -25,6 +25,12 @@ const codeRules = [
   { required: true, message: '验证码不能为空' },
   { pattern: /^\d{6}$/, message: '验证码为6位数字' }
 ]
+// 添加患者的姓名
+const nameRules = [
+  { required: true, message: '姓名不能为空' },
+  { pattern: /^(?:[\u4e00-\u9fa5·]{2,16})$/, message: '姓名为中文2-16个字符' }
+]
+// 添加患者的身份证号
 
 // 按需导出
-export { mobileRules, passwordRules, codeRules }
+export { mobileRules, passwordRules, codeRules, nameRules }

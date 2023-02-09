@@ -86,10 +86,7 @@ onUnmounted(() => {
 <template>
   <div class="login-page">
     <!-- Vant 4 组件 NavBar 导航栏 -->
-    <cp-nav-bar
-      right-text="注册"
-      @click-right="$router.push('/register')"
-    ></cp-nav-bar>
+    <cp-nav-bar right-text="注册" @click-right="$router.push('/register')"></cp-nav-bar>
 
     <!-- 头部 -->
     <div class="login-head">
@@ -125,10 +122,7 @@ onUnmounted(() => {
         <!-- 通过 right-icon 插槽可以在输入框尾部插入图标 -->
         <template #right-icon>
           <!-- 封装的全局通用组件CpIcon 通过动态属性name给组件CpIcon传值 -->
-          <cp-icon
-            @click="show = !show"
-            :name="`login-eye-${show ? 'on' : 'off'}`"
-          ></cp-icon>
+          <cp-icon @click="show = !show" :name="`login-eye-${show ? 'on' : 'off'}`"></cp-icon>
         </template>
       </van-field>
       <van-field
@@ -157,9 +151,7 @@ onUnmounted(() => {
       <div class="cp-cell">
         <!-- Vant 4 组件 Button 按钮 -->
         <!-- native-type属性：设置原生 button 标签的 type 属性 -->
-        <van-button native-type="submit" type="primary" round block
-          >登录</van-button
-        >
+        <van-button native-type="submit" type="primary" round block>登录</van-button>
       </div>
       <div class="cp-cell">
         <a href="javascript:;">忘记密码？</a>

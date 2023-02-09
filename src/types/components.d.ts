@@ -3,6 +3,7 @@
 // 导入组件实例/对象
 import CpNavBar from '@/components/CpNavBar.vue'
 import CpIcon from '@/components/CpIcon.vue'
+import CpRadioBtn from '@/components/CpRadioBtn.vue'
 
 /* 
 const obj = {
@@ -24,5 +25,6 @@ declare module 'vue' {
     // typeof 组件对象/实例，指定具体组件的TS类型，设置给全局通用组件CpNavBar等
     CpNavBar: typeof CpNavBar
     CpIcon: typeof CpIcon
+    CpRadioBtn: typeof CpRadioBtn
   }
 }
