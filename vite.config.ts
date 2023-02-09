@@ -24,7 +24,7 @@ export default defineConfig({
     }),
     // 创建SVG精灵
     createSvgIconsPlugin({
-      // 指定svg图标目录 绝对路径 node代码
+      // 指定svg图标目录 绝对路径【node代码】
       iconDirs: [path.resolve(process.cwd(), 'src/icons')]
     })
   ],

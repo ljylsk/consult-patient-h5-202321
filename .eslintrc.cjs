@@ -18,7 +18,7 @@ module.exports = {
       {
         singleQuote: true, // 单引号
         semi: false, // 分号
-        printWidth: 100, // 每行代码宽度 100字符
+        printWidth: 100, // 每行代码宽度 100 字符
         trailingComma: 'none', // 对象/数组内最后面的逗号
         endOfLine: 'auto' // 行尾 列终端
       }
