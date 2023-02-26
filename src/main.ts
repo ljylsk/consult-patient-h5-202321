@@ -10,6 +10,9 @@ import './styles/main.scss'
 // 引入虚拟svg图标注册文件
 import 'virtual:svg-icons-register'
 
+// 导入枚举文件
+import '@/enums'
+
 const app = createApp(App)
 
 app.use(pinia)

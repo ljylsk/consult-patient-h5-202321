@@ -1,8 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+// 注意：只有vant组件和src/components/下的组件才不需import~
 import KnowledgeList from '@/views/Home/components/KnowledgeList.vue'
+import FollowDoctor from '@/views/Home/components/FollowDoctor.vue'
+// 导入问诊仓库
+import { useConsultStore } from '@/stores'
+// 导入枚举类型
+import { ConsultType } from '@/enums'
 
 const active = ref('recommend')
+
+const store = useConsultStore()
 </script>
 
 <template>
@@ -27,7 +35,8 @@ const active = ref('recommend')
           </router-link>
         </van-col>
         <van-col span="8">
-          <router-link to="/consult/fast" class="nav">
+          <!-- 点击极速问诊，记录下就诊类型是极速问诊，跳转至极速问诊页面 ConsultFast.vue -->
+          <router-link to="/consult/fast" class="nav" @click="store.setType(ConsultType.Fast)">
             <cp-icon name="home-graphic"></cp-icon>
             <p class="title">极速问诊</p>
             <p class="desc">20s医生极速回复</p>
@@ -85,16 +94,19 @@ const active = ref('recommend')
       <!-- title 标题；name 标签名称，作为匹配的标识符 -->
       <!-- 在标签指定 name 属性的情况下，v-model:active 的值为当前标签的 name -->
       <van-tab title="关注" name="like">
-        <knowledge-list></knowledge-list>
+        <!-- 推荐关注医生 -->
+        <follow-doctor></follow-doctor>
+        <!-- 需要明确knowledge-list组件文章类型，knowledge-list组件内用type属性接收 -->
+        <knowledge-list type="like"></knowledge-list>
       </van-tab>
       <van-tab title="推荐" name="recommend">
-        <knowledge-list></knowledge-list>
+        <knowledge-list type="recommend"></knowledge-list>
       </van-tab>
       <van-tab title="减脂" name="fatReduction">
-        <knowledge-list></knowledge-list>
+        <knowledge-list type="fatReduction"></knowledge-list>
       </van-tab>
       <van-tab title="饮食" name="food">
-        <knowledge-list></knowledge-list>
+        <knowledge-list type="food"></knowledge-list>
       </van-tab>
     </van-tabs>
   </div>

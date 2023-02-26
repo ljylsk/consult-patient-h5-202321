@@ -1,6 +1,14 @@
 import { useUserStore } from '@/stores'
 import { createRouter, createWebHistory } from 'vue-router'
 
+// 进度条
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+NProgress.configure({
+  // 关闭右上角加载图标
+  showSpinner: false
+})
+
 // vue2:
 // 1. import VueRouter from 'vue-router'
 // 2. const router = new VueRouter({ routes: [// 路由规则] })
@@ -55,14 +63,44 @@ const router = createRouter({
       path: '/user/patient',
       component: () => import('@/views/User/PatientPage.vue'),
       meta: { title: '家庭档案' }
+    },
+    // 极速问诊
+    {
+      path: '/consult/fast',
+      component: () => import('@/views/Consult/ConsultFast.vue'),
+      meta: { title: '极速问诊' }
+    },
+    // 选择科室
+    {
+      path: '/consult/dep',
+      component: () => import('@/views/Consult/ConsultDep.vue'),
+      meta: { title: '选择科室' }
+    },
+    // (病情描述)图文问诊
+    {
+      path: '/consult/illness',
+      component: () => import('@/views/Consult/ConsultIllness.vue'),
+      meta: { title: '图文问诊' }
+    },
+    // 支付
+    {
+      path: '/consult/pay',
+      component: () => import('@/views/Consult/ConsultPay.vue'),
+      meta: { title: '支付' }
+    },
+    // 问诊室
+    {
+      path: '/room',
+      component: () => import('@/views/Room/index.vue'),
+      meta: { title: '问诊室' }
     }
   ]
 })
 
 // 全局前置守卫 - 访问权限控制
 router.beforeEach((to) => {
-  // 切换路由设置标题
-  document.title = `优医问诊-${to.meta.title}`
+  // 开启进度条
+  NProgress.start()
   // return true 或 不return => 直接放行
   // return '路由地址' => 拦截到某个页面
   const store = useUserStore()
@@ -70,6 +108,14 @@ router.beforeEach((to) => {
   const whiteList = ['/login']
   // 需求：当未登录即没有token 且 当前页面不是登录页 拦截到登录页
   if (!store.user?.token && !whiteList.includes(to.path)) return '/login'
+})
+
+// 全局后置钩子
+router.afterEach((to) => {
+  // 切换路由完成后修改标题
+  document.title = `优医问诊-${to.meta.title || ''}`
+  // 关闭进度条
+  NProgress.done()
 })
 
 export default router

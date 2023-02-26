@@ -1,4 +1,5 @@
 <!-- 个人中心 - 家庭档案 页面 -->
+<!-- 首页 - 选择患者 页面 -->
 
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
@@ -6,10 +7,14 @@ import { ref, onMounted, computed } from 'vue'
 import type { Patient } from '@/types/user'
 // 按需导入接口
 import { getPatientList, addPatient, updatePatient, deletePatient } from '@/services/user'
+import { useRoute } from 'vue-router'
 import { showConfirmDialog, showSuccessToast, showToast } from 'vant'
+// 导入问诊仓库
+import { useConsultStore } from '@/stores'
 // 导入中国大陆个人身份证号码验证器（JS版）
 import IDValidator from 'id-validator'
 import { nameRules } from '@/utils/rules'
+import router from '@/router'
 
 // 定义患者列表信息的响应式数据
 const list = ref<Patient[]>([])
@@ -17,6 +22,8 @@ const list = ref<Patient[]>([])
 const getList = async () => {
   const res = await getPatientList()
   list.value = res.data
+  // 默认选中患者
+  changeDefaultPatient()
 }
 onMounted(() => {
   // 获取患者列表信息
@@ -125,13 +132,74 @@ const remove = async () => {
     showSuccessToast('删除患者成功')
   }
 }
+
+// ！！！选择患者页面逻辑:
+// 1. 界面兼容，根据地址栏是否有标识
+const route = useRoute()
+// 是否是选择患者页面
+const isChange = computed(() => route.query.isChange === '1') // 如果是首页下的选择患者页面，路由地址中携带isChange参数，且值为1；如果是个人中心的家庭档案页面，则没有参数
+// console.log(isChange)
+// 2. 点击选中患者
+// 定义选中的患者的id的响应式数据
+const patientId = ref<string>()
+// 定义点击患者时的回调函数
+const selectPatient = (item: Patient) => {
+  // 只有选择患者页面点击患者时才需要记录患者id
+  if (isChange.value) patientId.value = item.id
+}
+// 3. 默认选中患者，有默认患者就选默认患者，没有就选第一个患者
+// 定义一个默认选中患者的函数。在调接口获取完患者信息列表后直接调用该函数
+const changeDefaultPatient = () => {
+  // 如果是选择患者页面且患者列表信息非空
+  if (isChange.value && list.value.length) {
+    // 找到患者信息列表list中的默认患者
+    // find()方法返回数组中满足提供的测试函数的第一个元素的值，否则返回 undefined。filter()方法返回的是一个新的、由通过测试的元素组成的数组，如果没有任何数组元素通过测试，则返回空数组。
+    const defPatient = list.value.find((item) => item.defaultFlag === 1)
+    if (defPatient) {
+      // 患者信息列表list中有默认患者
+      // 选中的患者的id等于患者信息列表list中默认患者的id
+      patientId.value = defPatient.id
+    } else {
+      // 患者信息列表list中没有默认患者
+      // 选中的患者的id等于患者信息列表list中第一个患者的id
+      patientId.value = list.value[0].id
+    }
+  }
+}
+// 4. 一定需要选中患者，存储患者id到仓库，跳转至支付页面
+const store = useConsultStore()
+// 定义点击下一步按钮的回调函数
+const next = () => {
+  // 如果没有选中患者，轻提示
+  if (!patientId.value) return showToast('请选中一个患者')
+  // 选中的患者的id存入问诊仓库的问诊记录中
+  store.setPatient(patientId.value)
+  // 跳转至支付页面
+  router.push('/consult/pay')
+}
+//
 </script>
 
 <template>
   <div class="patient-page">
-    <cp-nav-bar title="家庭档案"></cp-nav-bar>
+    <!-- 如果isChange为true，是选择患者页面，否则为家庭档案页面 -->
+    <cp-nav-bar :title="isChange ? '选择患者' : '家庭档案'"></cp-nav-bar>
+
+    <!-- 如果isChange为true，显示此块内容，否则不显示 -->
+    <div class="patient-change" v-if="isChange">
+      <h3>请选择患者信息</h3>
+      <p>以便医生给出更准确的治疗，信息仅医生可见</p>
+    </div>
+
     <div class="patient-list">
-      <div class="patient-item" v-for="item in list" :key="item.id">
+      <!-- 如果patientId等于点击的患者的id，则动态添加上类名selected(已设置了点击选中患者时的样式) => :class="{ selected: patientId === item.id }" -->
+      <div
+        class="patient-item"
+        v-for="item in list"
+        :key="item.id"
+        @click="selectPatient(item)"
+        :class="{ selected: patientId === item.id }"
+      >
         <div class="info">
           <span class="name">{{ item.name }}</span>
           <!-- 身份证脱敏 显示前6位和后4位 中间显示* .replace(/^(.{6})(?:\d+)(.{4})$/, '$1********$2') -->
@@ -150,6 +218,13 @@ const remove = async () => {
       </div>
       <div class="patient-tip">最多可添加 6 人</div>
     </div>
+
+    <!-- 底部按钮 -->
+    <!-- 如果isChange为true，显示此按钮，否则不显示 -->
+    <div class="patient-next" v-if="isChange">
+      <van-button type="primary" round block @click="next">下一步</van-button>
+    </div>
+
     <!-- Vant 4 组件 Popup 弹出层 -->
     <!-- v-model:show="show" 相当于 :show="show" 和 @update:show="show = $event" -->
     <van-popup v-model:show="show" position="right" :close-on-click-overlay="false">
@@ -302,5 +377,25 @@ const remove = async () => {
 }
 .pb4 {
   padding-bottom: 4px;
+}
+.patient-change {
+  padding: 15px;
+  > h3 {
+    font-weight: normal;
+    margin-bottom: 5px;
+  }
+  > p {
+    color: var(--cp-text3);
+  }
+}
+.patient-next {
+  padding: 15px;
+  background-color: #fff;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 80px;
+  box-sizing: border-box;
 }
 </style>

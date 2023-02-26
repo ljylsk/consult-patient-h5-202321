@@ -17,8 +17,10 @@ export type User = {
 // 短信验证码的TS类型声明
 export type CodeType = 'login' | 'register' | 'changeMobile' | 'forgetPassword' | 'bindMobile'
 
-// 从用户信息中删除某些属性 type 新类型别名 = Omit<类型别名, '属性名'>
-// PS：从某类型中摘取某些属性 type 新类型别名 = Pick<类型别名, '属性名'>
+// 从某TS类型中删除某些属性 type 新类型别名 = Omit<类型别名, '属性名' | '属性名'>
+// 从某TS类型中摘取某些属性 type 新类型别名 = Pick<类型别名, '属性名' | '属性名'>
+
+// 从用户信息中删除token属性
 type OmitUser = Omit<User, 'token'>
 // 个人用户信息的TS类型声明
 export type UserInfo = OmitUser & {

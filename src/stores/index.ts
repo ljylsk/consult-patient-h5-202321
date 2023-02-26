@@ -18,3 +18,4 @@ export default pinia
 // export { useUserStore }
 // 统一导出
 export * from './user'
+export * from './consult'
