@@ -4,8 +4,7 @@
 import { ref, computed, onMounted } from 'vue'
 // 导入TS类型
 import type { ConsultIllness, Image } from '@/types/consult'
-// 导入枚举类型
-import { IllnessTime } from '@/enums'
+import { illnessTimeOptions, illnessFlagOptions } from '@/services/constants'
 import type { UploaderAfterRead, UploaderFileListItem } from 'vant/lib/uploader/types'
 // 导入接口函数
 import { uploadImg } from '@/services/consult'
@@ -21,7 +20,8 @@ const form = ref<ConsultIllness>({
   consultFlag: undefined,
   pictures: []
 })
-// 定义患病时间按钮的数据
+// 因为下面两个数据在RoomMessage.vue组件中也会使用，所以单独提取到constants.ts文件中公用
+/* // 定义患病时间按钮的数据
 const illnessTimeOptions = [
   { label: '一周内', value: IllnessTime.Week },
   { label: '一月内', value: IllnessTime.Month },
@@ -32,7 +32,7 @@ const illnessTimeOptions = [
 const illnessFlagOptions = [
   { label: '就诊过', value: 1 },
   { label: '未就诊过', value: 0 }
-]
+] */
 
 // 定义上传图片的响应式数据
 const fileList = ref<Image[]>([])

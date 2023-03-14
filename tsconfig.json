@@ -5,7 +5,14 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    // TypeScript 最高支持es2016语法【详见/node_models/@vue/tsconfig/tsconfig.web.json】，但是项目中用到的 finally() 方法是es2018新增，TS要想支持更高版本的es语法，需要在此文件中将 “lib” 编译器选项更改为“es2018”或更高版本
+    "lib": [
+      "ES2018",
+
+      "DOM",
+      "DOM.Iterable"
+    ]
   },
 
   "references": [

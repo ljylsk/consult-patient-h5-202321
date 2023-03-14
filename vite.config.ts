@@ -16,7 +16,10 @@ export default defineConfig({
   // base: '/', // 项目的基础路径前缀 默认是 '/'
   plugins: [
     // 解析单文件组件的插件
-    vue(),
+    vue({
+      // Props解构默认值时，需要显式地选择开启响应式语法糖
+      reactivityTransform: true
+    }),
     // 自动导入组件的插件 解析器可以是 vant element and-vue等等 且自动导入src/components文件夹下的组件，不需import ~ 直接使用
     Components({
       dts: false, // 默认是 true 开启自动生成组件的类型声明文件，vant组件已经有类型声明文件，只要导入了就会使用类型声明

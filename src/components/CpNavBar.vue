@@ -37,11 +37,13 @@ const onClickLeft = () => {
   }
 }
 
+// 子组件(当前组件)通过 defineEmits 获取 emit 函数
 const emit = defineEmits<{
   (e: 'clickRight'): void // 从 Vant 4 开始，所有的事件均采用 Vue 官方推荐的驼峰格式进行命名
 }>()
 const onClickRight = () => {
   // 点击右侧文字按钮，执行的逻辑
+  // 子组件(当前组件)通过 emit 触发事件，也可以传递数据
   emit('clickRight') // 从 Vant 4 开始，所有的事件均采用 Vue 官方推荐的驼峰格式进行命名
 }
 </script>

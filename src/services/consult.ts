@@ -1,6 +1,9 @@
 import { request } from '@/utils/request'
 // 导入TS类型
 import type {
+  ConsultOrderItem,
+  ConsultOrderListParams,
+  ConsultOrderPage,
   ConsultOrderPreData,
   ConsultOrderPreParams,
   DoctorPage,
@@ -52,3 +55,30 @@ export const getConsultOrderPayUrl = (data: {
   orderId: string
   payCallback: string
 }) => request<{ payUrl: string }>('patient/consult/pay', 'POST', data)
+
+// 问诊-查询订单详情信息-找医生、极速问诊和开药问诊接口
+export const getConsultOrderDetail = (orderId: string) =>
+  request<ConsultOrderItem>('patient/consult/order/detail', 'GET', { orderId })
+
+// 药品订单-根据处方ID查询处方单
+export const getPrescriptionPic = (id: string) =>
+  request<{ url: string }>(`patient/consult/prescription/${id}`)
+
+// 问诊-订单-评价医生接口
+export const evaluateConsultOrder = (data: {
+  docId: string
+  orderId: string
+  score: number
+  content: string
+  anonymousFlag: 0 | 1
+}) => request<{ id: string }>('patient/order/evaluate', 'POST', data)
+
+// 问诊记录-订单列表-找医生、极速问诊、开药问诊接口
+export const getConsultOrderList = (params: ConsultOrderListParams) =>
+  request<ConsultOrderPage>('patient/consult/order/list', 'GET', params)
+
+// 取消订单接口
+export const cancelOrder = (id: string) => request(`patient/order/cancel/${id}`, 'PUT')
+
+// 删除订单接口
+export const deleteOrder = (id: string) => request(`patient/order/${id}`, 'DELETE')

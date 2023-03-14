@@ -6,7 +6,7 @@ import { ref, onMounted } from 'vue'
 import type { ConsultOrderPreData } from '@/types/consult'
 import type { Patient } from '@/types/user'
 // 导入接口函数
-import { getConsultOrderPre, createConsultOrder, getConsultOrderPayUrl } from '@/services/consult'
+import { getConsultOrderPre, createConsultOrder } from '@/services/consult'
 import { getPatientDetail } from '@/services/user'
 // 导入问诊仓库
 import { useConsultStore } from '@/stores'
@@ -77,7 +77,7 @@ const agree = ref(false)
 // 定义显示隐藏动作面板的响应式数据变量
 const show = ref(false)
 // 定义支付方式的响应式数据变量【支付接口中的支付方式是paymentMethod，其中0是微信支付，1是支付宝支付】
-const paymentMethod = ref<0 | 1>()
+// const paymentMethod = ref<0 | 1>()
 // 定义问诊订单id的响应式数据变量
 const orderId = ref<string>()
 // 定义按钮加载状态的响应式数据变量
@@ -127,7 +127,7 @@ const onClose = () => {
       // 点击 仍要关闭 按钮后的逻辑
       // 防止有orderId后，onBeforeRouteLeave会拦截，阻止跳转到问诊记录页面
       orderId.value = ''
-      // 页面跳转到问诊记录页面
+      // 跳转到问诊记录页面，继续支付。不会进入问诊室页面。也可以直接在问诊室的路由配置上定义 beforeEnter 守卫
       router.push('/user/consult')
       // 返回 true 关闭
       return true
@@ -138,7 +138,10 @@ onBeforeRouteLeave(() => {
   // 如果已生成问诊订单id，则对返回(浏览器和页面两处的返回)进行拦截即点击返回时页面不跳转
   if (orderId.value) return false
 })
-// 立即支付
+
+/* 
+// 立即支付:
+// 定义立即支付按钮的点击事件的事件处理函数
 const pay = async () => {
   // if条件不可以写成!paymentMethod.value，因为paymentMethod.value可能为0或1，而0是false...
   if (paymentMethod.value === undefined) return showToast('请选择支付方式')
@@ -153,7 +156,8 @@ const pay = async () => {
     // 跳转到支付的url 没有使用路由跳转 而是原生的浏览器跳转
     window.location.href = res.data.payUrl // window.location.href 不仅可以获取当前地址，还可以赋予新的地址
   }
-}
+} 
+*/
 </script>
 
 <template>
@@ -209,12 +213,14 @@ const pay = async () => {
       :loading="loading"
     />
 
+    <!-- 支付抽屉：多处会用到，所以封装成组件 -->
     <!-- Vant 4 组件 ActionSheet 动作面板 -->
     <!-- v-model:show属性	是否显示动作面板 -->
     <!-- title属性	顶部标题 -->
     <!-- closeable属性	是否显示关闭图标 -->
     <!-- before-close属性	关闭前的回调函数，返回 false 可阻止关闭，支持返回 Promise -->
     <!-- close-on-popstate属性	是否在页面回退时自动关闭。注：因为想要点击浏览器的返回和支付页面左上角的返回按钮进行拦截不进行页面跳转 -->
+    <!-- 
     <van-action-sheet
       v-model:show="show"
       title="选择支付方式"
@@ -225,10 +231,10 @@ const pay = async () => {
       <div class="pay-type">
         <p class="amount">￥{{ payInfo.actualPayment.toFixed(2) }}</p>
         <van-cell-group>
-          <!-- 支付接口中的支付方式是paymentMethod，其中0是微信支付，1是支付宝支付 -->
+          // 注：支付接口中的支付方式是paymentMethod，其中0是微信支付，1是支付宝支付
           <van-cell title="微信支付" @click="paymentMethod = 0">
             <template #icon><cp-icon name="consult-wechat"></cp-icon></template>
-            <!-- checkbox的checked属性为true时表示选中 -->
+            // 注：checkbox的checked属性为true时表示选中
             <template #extra><van-checkbox :checked="paymentMethod === 0"></van-checkbox></template>
           </van-cell>
           <van-cell title="支付宝支付" @click="paymentMethod = 1">
@@ -240,7 +246,16 @@ const pay = async () => {
           <van-button type="primary" round block @click="pay">立即支付</van-button>
         </div>
       </div>
-    </van-action-sheet>
+    </van-action-sheet> 
+    -->
+    <!-- vue3 中 v-model:show 语法糖为【v-model:show="show" 相当于 :show="show"和@update:show="show =
+    $event"】 父组件(当前组件)将show值传给子组件CpPaySheet.vue，子组件通知父组件修改show值 -->
+    <cp-pay-sheet
+      v-model:show="show"
+      :orderId="orderId"
+      :actualPayment="payInfo.actualPayment"
+      @onClose="onClose"
+    ></cp-pay-sheet>
   </div>
 
   <!-- Vant 4 组件 Skeleton 骨架屏：用于在内容加载过程中展示一组占位图形 -->
@@ -315,6 +330,7 @@ const pay = async () => {
     width: 160px;
   }
 }
+/* 
 .pay-type {
   .amount {
     padding: 20px;
@@ -335,5 +351,6 @@ const pay = async () => {
       font-size: 16px;
     }
   }
-}
+} 
+*/
 </style>

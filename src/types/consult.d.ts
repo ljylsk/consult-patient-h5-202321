@@ -1,7 +1,8 @@
 // 首页的TS类型声明
 
 // 导入枚举类型
-import type { ConsultType, IllnessTime } from '@/enums'
+import type { ConsultType, IllnessTime, OrderState } from '@/enums'
+import type { Patient } from './user'
 
 // 文章类型   推荐 | 减脂 | 饮食 | 关注
 export type KnowledgeType = 'recommend' | 'fatReduction' | 'food' | 'like'
@@ -147,9 +148,38 @@ export type ConsultOrderPreData = {
   actualPayment: number // 实付金额
 }
 
-/* {
-  liverFunction: 0 | 1 | 2 // 肝功能，0正常 1异常 2不清楚
-    renalFunction: 0 | 1 | 2 // 肾功能，0正常 1异常 2不清楚
-    allergicHistory: 0 | 1 | 2 // 过敏史，0无 1有 2不清楚
-    fertilityStatus: 0 | 1 | 2 | 3 // 生育状态及计划，0无 1备孕中 2已怀孕 3哺乳期
-} */
+// 问诊订单单项信息
+// 详见问诊-查询订单详情信息-找医生、极速问诊和开药问诊接口
+export type ConsultOrderItem = Consult & {
+  // id: string // 订单id
+  orderNo: string // 订单编号
+  typeValue: string // 订单类型文字
+  createTime: string // 订单创建时间
+  patientInfo: Patient // 患者信息
+  docInfo: Doctor // 咨询的医生
+  prescriptionId: string // 处方id
+  status: OrderState // 订单状态
+  statusValue: string // 订单状态文字
+  // cancelReason: string // 取消订单原因
+  // cancelReasonValue: string // 取消订单原因文字
+  // cancelProcess: string // 取消/退款进度
+  countdown: number // 倒计时-1表示计时已过(单位s)
+  payment: number // 价格
+  pointDeduction: number // 积分可抵扣
+  couponDeduction: number // 优惠券抵扣
+  actualPayment: number // 实付金额
+  // evaluateFlag: string // 是否已经评价 1已评价0未评价
+  evaluateId: number // 评价id
+}
+
+// 问诊记录查询参数
+export type ConsultOrderListParams = PagePramas & {
+  type: ConsultType // 就诊类型
+}
+
+// 问诊记录分页数据
+export type ConsultOrderPage = {
+  total: number // 总条数
+  pageTotal: number // 总页数
+  rows: ConsultOrderItem[] // 问诊记录的具体内容
+}

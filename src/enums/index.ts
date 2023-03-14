@@ -92,3 +92,51 @@ export enum IllnessTime {
   HalfYear, // 半年内
   More // 半年以上
 }
+
+// 医生问诊室接收消息类型的枚举 详见聊天-接收对话信息接口
+export enum MsgType {
+  // 文字
+  MsgText = 1,
+  // 图片
+  MsgImage = 4,
+  // 患者病情
+  CardPat = 21,
+  // 处方信息
+  CardPre = 22,
+  // 未提交评价
+  CardEvaForm = 23,
+  // 已提交评价
+  CardEva = 24,
+  // 普通通知
+  Notify = 31,
+  // 温馨提示
+  NotifyTip = 32,
+  // 订单取消
+  NotifyCancel = 33
+}
+// 处方状态
+export enum PrescriptionStatus {
+  // 未购买
+  NotPayment = 1,
+  // 已购买
+  Payment = 2,
+  // 已失效
+  Invalid = 3
+}
+
+// 订单状态
+export enum OrderState {
+  // 问诊订单
+  ConsultPay = 1, // 待支付
+  ConsultWait = 2, // 待接诊
+  ConsultChat = 3, // 问诊中
+  ConsultComplete = 4, // 问诊完成
+  ConsultCancel = 5, // 取消问诊
+
+  // 药品订单
+  MedicinePay = 10, // 待支付
+  MedicineSend = 11, // 待发货
+  MedicineTake = 12, // 待收货
+  MedicineComplete = 13, // 已完成
+  MedicineCancel = 14 // 取消订单
+}

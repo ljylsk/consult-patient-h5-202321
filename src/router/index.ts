@@ -19,7 +19,7 @@ NProgress.configure({
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL), // history属性配置历史模式：推荐使用createWebHistory() 创建HTML5模式；createWebHashHistory() 创建hash模式。路由基准地址import.meta.env.BASE_URL的值来自vite.config.ts文件中的base属性，配置项目的基础路径前缀，默认是'/' 新一代Vue脚手架(create-vue)提供的数据
   routes: [
-    // 路由规则：
+    // 路由规则：路由地址详见约定路由规则
     // 没有底部导航栏的页面都是一级路由
     // 登录页
     {
@@ -93,6 +93,31 @@ const router = createRouter({
       path: '/room',
       component: () => import('@/views/Room/index.vue'),
       meta: { title: '问诊室' }
+      /* 
+      // beforeEnter 守卫，只在进入路由时触发，不会在 params、query 或 hash 改变时触发。在路由配置上定义。自带两个参数 to from
+      // 如果支付失败，跳转至问诊记录页面，去继续支付
+      beforeEnter(to) {
+        if (to.query.payResult === 'false') return '/user/consult'
+      } 
+      */
+    },
+    // 问诊记录
+    {
+      path: '/user/consult',
+      component: () => import('@/views/User/ConsultPage.vue'),
+      meta: { title: '问诊记录' }
+    },
+    // 问诊详情
+    {
+      path: '/user/consult/:id',
+      component: () => import('@/views/User/ConsultDetail.vue'),
+      meta: { title: '问诊详情' }
+    },
+    // 药品支付
+    {
+      path: '/order/pay',
+      component: () => import('@/views/Order/OrderPay.vue'),
+      meta: { title: '药品支付' }
     }
   ]
 })

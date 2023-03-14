@@ -2,14 +2,22 @@
 
 <script setup lang="ts">
 // 导入问诊仓库
+import { useRouter } from 'vue-router'
 import { useConsultStore } from '@/stores'
 // 调用useConsultStore()，创建store实例
 const store = useConsultStore()
+const router = useRouter()
+// 定义顶部导航栏右侧文字 问诊记录 的点击事件的处理函数
+const clickRight = () => {
+  // 跳转至问诊记录页面
+  router.push('/User/consult')
+}
 </script>
 
 <template>
   <div class="consult-fast-page">
-    <cp-nav-bar title="极速问诊" right-text="问诊记录"></cp-nav-bar>
+    <!-- 父组件(当前组件)在子组件cp-nav-bar上绑定自定义事件clickRight，事件处理函数为clickRight -->
+    <cp-nav-bar title="极速问诊" right-text="问诊记录" @clickRight="clickRight"></cp-nav-bar>
     <div class="fast-logo">
       <img class="img" src="@/assets/consult-fast.png" alt="" />
       <p class="text"><span>20s</span> 快速匹配专业医生</p>
