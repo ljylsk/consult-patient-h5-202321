@@ -6,11 +6,13 @@ import { getConsultOrderPayUrl } from '@/services/consult'
 import { showToast } from 'vant'
 import { ref } from 'vue'
 
+// 使用该组件的父组件需要传过来的数据
 const props = defineProps<{
   orderId: string // 订单id
   show: boolean // 控制动作面板显示与隐藏
   actualPayment: number // 实付金额
   onClose?: () => void // 关闭动作面板前的回调函数，返回 false 可阻止关闭。可选。极速问诊中需要进行关闭当作面板前的操作->显示 Dialog 弹出框，问诊订单和药品订单中不需要...直接关闭即可
+  payCallback: string // 支付成功后跳转的地址
 }>()
 
 const emit = defineEmits<{
@@ -28,9 +30,12 @@ const pay = async () => {
   if (props.orderId) {
     // 调用订单-支付接口获取支付需要跳转的url
     const res = await getConsultOrderPayUrl({
+      // 支付方式
       paymentMethod: paymentMethod.value,
+      // 订单id
       orderId: props.orderId, // 会提示不能将类型"string | undefined"分配给类型string。所以需要类型守卫if(orderId.value){}
-      payCallback: 'http://localhost:5173/room'
+      // 支付成功后跳转的地址
+      payCallback: props.payCallback
     })
     // 跳转到支付的url 没有使用路由跳转 而是原生的浏览器跳转
     window.location.href = res.data.payUrl // window.location.href 不仅可以获取当前地址，还可以赋予新的地址

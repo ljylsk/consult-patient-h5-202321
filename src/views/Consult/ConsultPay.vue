@@ -250,11 +250,13 @@ const pay = async () => {
     -->
     <!-- vue3 中 v-model:show 语法糖为【v-model:show="show" 相当于 :show="show"和@update:show="show =
     $event"】 父组件(当前组件)将show值传给子组件CpPaySheet.vue，子组件通知父组件修改show值 -->
+    <!-- http://localhost:5173/room 为医生问诊室页面的路由地址，详见约定路由规则 -->
     <cp-pay-sheet
       v-model:show="show"
       :orderId="orderId"
       :actualPayment="payInfo.actualPayment"
       @onClose="onClose"
+      payCallback="http://localhost:5173/room"
     ></cp-pay-sheet>
   </div>
 

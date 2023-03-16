@@ -109,7 +109,7 @@ const router = createRouter({
     },
     // 问诊详情
     {
-      path: '/user/consult/:id',
+      path: '/user/consult/:id', // 动态路由
       component: () => import('@/views/User/ConsultDetail.vue'),
       meta: { title: '问诊详情' }
     },
@@ -118,6 +118,18 @@ const router = createRouter({
       path: '/order/pay',
       component: () => import('@/views/Order/OrderPay.vue'),
       meta: { title: '药品支付' }
+    },
+    // 药品支付结果
+    {
+      path: '/order/pay/result',
+      component: () => import('@/views/Order/OrderPayResult.vue'),
+      meta: { title: '药品支付结果' }
+    },
+    // 药品订单详情
+    {
+      path: '/order/:id', // 动态路由
+      component: () => import('@/views/Order/OrderDetail.vue'),
+      meta: { title: '药品订单详情' }
     }
   ]
 })

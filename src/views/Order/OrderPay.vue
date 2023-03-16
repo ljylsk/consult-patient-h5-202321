@@ -45,21 +45,27 @@ const pay = async () => {
   if (!checked.value) return showToast('请勾选支付协议')
   if (!address.value?.id) return showToast('请选择收货地址')
   if (!orderPre.value?.id) return showToast('没有处方id')
-  // 显示继续支付按钮的加载中状态
-  loading.value = true
-  try {
-    // 调用接口获取订单id
-    const res = await createMedicalOrder({
-      id: orderPre.value?.id,
-      couponId: orderPre.value?.couponId,
-      addressId: address.value?.id
-    })
-    orderId.value = res.data.id
-    // 显示支付方式的动作面板
+  // 如果没有orderId药品订单id
+  if (!orderId.value) {
+    // 显示继续支付按钮的加载中状态
+    loading.value = true
+    try {
+      // 调用接口获取订单id
+      const res = await createMedicalOrder({
+        id: orderPre.value?.id,
+        couponId: orderPre.value?.couponId,
+        addressId: address.value?.id
+      })
+      orderId.value = res.data.id
+      // 显示支付方式的动作面板
+      show.value = true
+    } catch (e) {
+      // 隐藏继续支付按钮的加载中状态
+      loading.value = false
+    }
+  } else {
+    // 有药品订单id，显示支付方式的动作面板
     show.value = true
-  } catch (e) {
-    // 隐藏继续支付按钮的加载中状态
-    loading.value = false
   }
 }
 </script>
@@ -129,16 +135,19 @@ const pay = async () => {
       button-text="立即支付"
       button-type="primary"
       text-align="left"
+      :loading="loading"
       @click="pay"
     ></van-submit-bar>
 
     <!-- 支付方式的动作面板组件 -->
     <!-- vue3 中 v-model:show 语法糖【 v-model:show="show" 相当于 :show="show"和@update:show="show =
       $event"】 父组件(当前组件)将show值传给子组件CpPaySheet.vue，子组件通知父组件修改show值 -->
+    <!-- /order/pay/result 为药品订单支付结果页面的路由地址，详见约定路由规则 -->
     <cp-pay-sheet
       v-model:show="show"
       :orderId="orderId"
       :actualPayment="orderPre?.actualPayment"
+      payCallback="http://localhost:5173/order/pay/result"
     ></cp-pay-sheet>
   </div>
 
