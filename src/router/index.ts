@@ -31,6 +31,7 @@ const router = createRouter({
     {
       // 记录的路径
       path: '/',
+      // 组件
       component: () => import('@/views/Layout/index.vue'),
       // 重定向
       redirect: '/home',

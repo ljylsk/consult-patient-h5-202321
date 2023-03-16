@@ -183,6 +183,7 @@ const show = ref(false)
     <!-- vue3 中 v-model:show 语法糖【v-model:show="show" 相当于 :show="show"和@update:show="show =
     $event"】 父组件(当前组件)将show值传给子组件CpPaySheet.vue，子组件通知父组件修改show值 -->
     <!-- http://localhost:5173/room 为医生问诊室页面的路由地址，详见约定路由规则 -->
+    <!-- 因为服务器监听的端口号是5173，所以浏览器访问的端口号也要是5173，如果地址不一致会导致无法访问。不写端口号的话默认是8080 -->
     <cp-pay-sheet
       v-model:show="show"
       :orderId="item?.id"

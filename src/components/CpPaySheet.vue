@@ -1,5 +1,5 @@
 <!-- 支付方式的动作面板组件 -->
-<!-- 极速问诊ConsultPay.vue、问诊订单ConsultDetail.vue和药品订单中都会用到 -->
+<!-- 极速问诊ConsultPay.vue、问诊详情ConsultDetail.vue和药品订单详情OrderDetail.vue中都会用到 -->
 
 <script setup lang="ts">
 import { getConsultOrderPayUrl } from '@/services/consult'
