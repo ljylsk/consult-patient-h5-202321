@@ -51,14 +51,14 @@ const code = ref('')
 // 1. API接口调用函数
 // 2. 发送短信验证码：判断是否正在倒计时 校验手机号 调用短信验证码接口
 // 3. 接口成功，倒计时，组件销毁要清理定时器
-// 定义倒计时事件为0
+// 定义倒计时时间为0
 const time = ref(0)
 // 定义定时器个数
 let timeId: number
 // 通过 ref 可以获取到 Form 实例
 const form = ref<FormInstance | null>(null)
 const send = async () => {
-  // 正在倒计时，timed大于0，此时不能发送验证码，直接返回
+  // 正在倒计时，time大于0，此时不能发送验证码，直接返回
   if (time.value > 0) return
 
   // 校验手机号
@@ -81,6 +81,18 @@ onUnmounted(() => {
   // 清除定时器
   clearInterval(timeId)
 })
+
+/* 
+// 放置QQ登录按钮
+// 组件挂载完成后执行该回调函数~
+onMounted(() => {
+  // 调用login()接口设置QQ登录按钮要放置的位置
+  QC.Login({
+    btnId: 'qq' //插入QQ登录按钮的节点id
+  })
+}) 
+*/
+// 以上放置QQ登录按钮的逻辑是为了拿到点击QQ登录按钮时跳转的链接(https://graph.qq.com/oauth2.0/authorize?client_id=102015968&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fconsult-patients.itheima.net%2Flogin%2Fcallback)【点击登录按钮后，在谷歌开发者工具的元素面板中查看id为qq的div标签下的a标签的onclick属性值中有跳转的链接】，复制该链接后删除上述放置QQ登录按钮的逻辑代码，改成自己的图片外的 a 标签的 href 跳转即可，不要QQ登录按钮。开发中是在电脑上测试的，使用QQ登录无法与手机上的QQ关联，所以把谷歌手机模拟器关闭，换成PC模拟器，使用手机QQ扫码进行登录，走通接下来的流程
 </script>
 
 <template>
@@ -163,67 +175,18 @@ onUnmounted(() => {
       <!-- Vant 4 组件 Divider 分割线 -->
       <van-divider>第三方登录</van-divider>
       <div class="icon">
-        <img src="@/assets/qq.svg" alt="" />
+        <a
+          href="https://graph.qq.com/oauth2.0/authorize?client_id=102015968&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fconsult-patients.itheima.net%2Flogin%2Fcallback"
+        >
+          <img src="@/assets/qq.svg" alt="" />
+        </a>
       </div>
+      <!-- QQ登录按钮的html元素节点，并给该节点指定全页面唯一的id -->
+      <!-- <div id="qq"></div> -->
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.login {
-  &-page {
-    padding-top: 46px;
-  }
-  &-head {
-    display: flex;
-    padding: 30px 30px 50px;
-    justify-content: space-between;
-    align-items: flex-end;
-    line-height: 1;
-    h3 {
-      font-weight: normal;
-      font-size: 24px;
-    }
-    a {
-      font-size: 15px;
-    }
-  }
-  &-other {
-    margin-top: 60px;
-    padding: 0 30px;
-    .icon {
-      display: flex;
-      justify-content: center;
-      img {
-        width: 36px;
-        height: 36px;
-        padding: 4px;
-      }
-    }
-  }
-}
-
-.van-form {
-  padding: 0 14px;
-  .cp-cell {
-    height: 52px;
-    line-height: 24px;
-    padding: 14px 16px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    .van-checkbox {
-      a {
-        color: var(--cp-primary);
-        padding: 0 5px;
-      }
-    }
-  }
-  .btn-send {
-    color: var(--cp-primary);
-    &.active {
-      color: rgba(22, 194, 163, 0.5);
-    }
-  }
-}
+@import '@/styles/login.scss';
 </style>

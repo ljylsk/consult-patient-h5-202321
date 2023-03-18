@@ -17,9 +17,10 @@ NProgress.configure({
 // 2. const router = createRouter({})
 
 const router = createRouter({
+  // 历史模式
   history: createWebHistory(import.meta.env.BASE_URL), // history属性配置历史模式：推荐使用createWebHistory() 创建HTML5模式；createWebHashHistory() 创建hash模式。路由基准地址import.meta.env.BASE_URL的值来自vite.config.ts文件中的base属性，配置项目的基础路径前缀，默认是'/' 新一代Vue脚手架(create-vue)提供的数据
+  // 路由规则：路由地址详见约定路由规则
   routes: [
-    // 路由规则：路由地址详见约定路由规则
     // 没有底部导航栏的页面都是一级路由
     // 登录页
     {
@@ -131,6 +132,18 @@ const router = createRouter({
       path: '/order/:id', // 动态路由
       component: () => import('@/views/Order/OrderDetail.vue'),
       meta: { title: '药品订单详情' }
+    },
+    // 物流详情
+    {
+      path: '/order/logistics/:id', // 动态路由
+      component: () => import('@/views/Order/OrderLogistics.vue'),
+      meta: { title: '物流详情' }
+    },
+    // QQ登录
+    {
+      path: '/login/callback',
+      component: () => import('@/views/Login/LoginCallback.vue'),
+      meta: { title: 'QQ登录 - 绑定手机' }
     }
   ]
 })
@@ -143,7 +156,7 @@ router.beforeEach((to) => {
   // return '路由地址' => 拦截到某个页面
   const store = useUserStore()
   // 白名单
-  const whiteList = ['/login']
+  const whiteList = ['/login', '/login/callback'] // 登录页和QQ快捷登录页(与index.html文件中引入QQ登录需要的JS SDK的JS脚本包的data-redirecturi属性值一致)
   // 需求：当未登录即没有token 且 当前页面不是登录页 拦截到登录页
   if (!store.user?.token && !whiteList.includes(to.path)) return '/login'
 })

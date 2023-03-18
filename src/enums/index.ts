@@ -140,3 +140,12 @@ export enum OrderState {
   MedicineComplete = 13, // 已完成
   MedicineCancel = 14 // 取消订单
 }
+
+// 物流状态
+export enum ExpressStatus {
+  Delivered = 1, // 已发货
+  Received = 2, // 已揽件
+  Transit = 3, // 运输中
+  Delivery = 4, // 已签收
+  Signed = 5 // 已签收
+}

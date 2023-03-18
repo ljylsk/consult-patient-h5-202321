@@ -33,3 +33,7 @@ export const deletePatient = (id: string) => request(`patient/del/${id}`, 'delet
 
 // 问诊-查询患者详情接口
 export const getPatientDetail = (id: string) => request<Patient>(`patient/info/${id}`)
+
+// qq三方登录
+export const loginByQQ = (openId: string) =>
+  request<User>('login/thirdparty', 'POST', { openId, source: 'qq' })

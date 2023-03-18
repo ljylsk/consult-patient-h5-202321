@@ -1,4 +1,5 @@
 // 药品订单相关
+// 按照所有接口的返回数据声明TS类型
 
 import type { OrderState } from '@/enums'
 import type { Medicines } from './room'
@@ -53,4 +54,37 @@ export type OrderDetail = {
   expressFee: number // 运费
   actualPayment: number // 实际付款金额
   roomId: string // 药品订单对应处方的聊天室id
+}
+
+// 当前运输位置
+export type CurrentLocationInfo = {
+  latitude: stiring // 维度信息
+  longitude: stiring // 经度信息
+}
+
+// 物流运输轨迹经纬度
+export type LogisticsInfo = {
+  latitude: stiring // 维度信息
+  longitude: stiring // 经度信息
+}
+
+// 物流日志
+export type Express = {
+  id: string // 物流详情信息id
+  content: string // 信息文字
+  createTime: string // 时间
+  status: string // 状态code
+  statusValue: string // 状态值
+}
+
+// 物流信息
+export type Logistics = {
+  estimatedTime: string // 预计送达时间
+  name: integer // 公司名称
+  awbNo: string // 快递单号
+  status: ExpressStatus // 订单状态
+  statusValue: string // 订单状态值
+  currentLocationInfo: CurrentLocationInfo // 当前运输位置
+  logisticsInfo: LogisticsInfo[] // 物流运输轨迹经纬度
+  list: Express[] // 物流日志
 }

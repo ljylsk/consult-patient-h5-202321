@@ -1,21 +1,25 @@
 <!-- 药品支付结果页面 -->
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import type { OrderDetail } from '@/types/order'
-import { getMedicalOrderDetail } from '@/services/order'
-import { useRoute } from 'vue-router'
 import { OrderState } from '@/enums'
+import { useOrderDetail } from '@/composable'
+import { useRoute } from 'vue-router'
 
-// 药品订单详情信息的响应式数据
-const order = ref<OrderDetail>()
 // 获取当前路由地址
 const route = useRoute()
+// 获取药品订单详情信息的逻辑在药品订单详情页面也会使用，所以封装成方法复用。详见compsabel.ts
+/* 
+// 药品订单详情信息的响应式数据
+const order = ref<OrderDetail>()
 onMounted(async () => {
   // 调用接口获取药品订单详情信息，请求参数id为订单id，从路由地址上获取
   const res = await getMedicalOrderDetail(route.query.orderId as string)
   order.value = res.data
-})
+}) 
+*/
+// 调用useOrderDetail方法，获取药品订单详情信息order，并传入实参订单id，从当前路由地址上获取
+// 当前页面路由地址是 http://localhost:5173/order/pay/result?orderId=6876900575989760&payResult=true&type=4。所以是 route.query.orderId 而不是 route.params.orderId
+const { order } = useOrderDetail(route.query.orderId as string)
 </script>
 
 <template>
@@ -32,7 +36,7 @@ onMounted(async () => {
         <!-- Vant 4 组件 Button 按钮 -->
         <!-- to属性	点击后跳转的目标路由对象，等同于 vue-router 的 to 属性 -->
         <!-- 点击 查看订单 按钮，根据药品订单id跳转至药品订单详情页面，路由地址详见约定路由规则 -->
-        <van-button type="primary" :to="`/user/consult/${order.id}`">查看订单</van-button>
+        <van-button type="primary" :to="`/order/${order.id}`">查看订单</van-button>
         <!-- 点击 返回诊室 按钮，跳转至医生问诊室页面 -->
         <van-button :to="`/room?orderId=${order.roomId}`">返回诊室</van-button>
       </div>
@@ -47,7 +51,7 @@ onMounted(async () => {
         <!-- Vant 4 组件 Button 按钮 -->
         <!-- to属性	点击后跳转的目标路由对象，等同于 vue-router 的 to 属性 -->
         <!-- 点击 查看订单 按钮，根据药品订单id跳转至药品订单详情页面，路由地址详见约定路由规则 -->
-        <van-button type="primary" :to="`/user/consult/${order.id}`">查看订单</van-button>
+        <van-button type="primary" :to="`/order/${order.id}`">查看订单</van-button>
         <!-- 点击 返回诊室 按钮，跳转至医生问诊室页面 -->
         <van-button :to="`/room?orderId=${order.roomId}`">返回诊室</van-button>
       </div>

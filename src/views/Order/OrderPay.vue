@@ -1,4 +1,4 @@
-<!-- 药品支付页面 -->
+<!-- 药品支付页面组件 -->
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
@@ -6,6 +6,7 @@ import type { AddressItem, OrderPre } from '@/types/order'
 import { getMedicalOrderPre, getAddressList, createMedicalOrder } from '@/services/order'
 import { useRoute } from 'vue-router'
 import { showToast } from 'vant'
+import OrderMedical from '@/views/Order/components/OrderMedical.vue'
 
 // 获取当前路由地址
 const route = useRoute()
@@ -13,7 +14,7 @@ const route = useRoute()
 const address = ref<AddressItem>()
 // 定义药品订单预支付信息的响应式数据
 const orderPre = ref<OrderPre>()
-// 组件挂载时调用~
+// 组件挂载完成后执行该回调函数~
 onMounted(async () => {
   // 调用接口获取药品订单预支付信息，请求参数处方id通过路由地址获取
   const res = await getMedicalOrderPre({ prescriptionId: route.query.id as string })
@@ -84,35 +85,33 @@ const pay = async () => {
       <!-- 收货人姓名 联系方式 -->
       <p>{{ address.receiver }} {{ address.mobile.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2') }}</p>
     </div>
-    <div class="order-medical">
+
+    <!-- 以下代码被封装成组件进行复用，详见 -->
+    <!-- <div class="order-medical">
       <div class="head">
         <h3>优医药房</h3>
         <small>优医质保 假一赔十</small>
       </div>
-      <!-- 遍历药品信息数组 -->
       <div class="item van-hairline--top" v-for="med in orderPre.medicines" :key="med.id">
-        <!-- 药品图片 -->
         <img class="img" :src="med.avatar" alt="" />
         <div class="info">
           <p class="name">
-            <!-- 药品名称 -->
-            <span>{{ med.name }}</span>
-            <!-- 药品数量 -->
+            <span>{{ med.name }}</span> 
             <span>x{{ med.quantity }}</span>
           </p>
           <p class="size">
-            <!-- 如果是处方药，显示处方药标签 -->
             <van-tag v-if="med.prescriptionFlag === 1">处方药</van-tag>
-            <!-- 药品规格 -->
             <span>{{ med.specs }}</span>
           </p>
-          <!-- 药品价格 -->
           <p class="price">￥{{ med.amount }}</p>
         </div>
-        <!-- 药品用法用量 -->
         <div class="desc">用法用量：{{ med.usageDosag }}</div>
       </div>
-    </div>
+    </div> -->
+    <!-- 药品订单列表组件 -->
+    <!-- 传入处方的药品信息，供子组件OrderMedical.vue内使用 -->
+    <order-medical :medicines="orderPre.medicines"></order-medical>
+
     <div class="order-detail">
       <van-cell-group>
         <van-cell title="药品金额" :value="`￥${orderPre.payment}`" />

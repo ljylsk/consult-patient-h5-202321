@@ -1,4 +1,4 @@
-import type { AddressItem, OrderDetail, OrderPre } from '@/types/order'
+import type { AddressItem, Logistics, OrderDetail, OrderPre } from '@/types/order'
 import { request } from '@/utils/request'
 
 // 订单-查询收货地址列表接口
@@ -19,3 +19,7 @@ export const createMedicalOrder = (data: { id: string; couponId: string; address
 // 药品订单-查询订单详情信息接口
 export const getMedicalOrderDetail = (id: string) =>
   request<OrderDetail>(`patient/medicine/order/detail/${id}`)
+
+// 订单-查询物流信息接口
+export const getMedicalOrderLogistics = (id: string) =>
+  request<Logistics>(`patient/order/${id}/logistics`)

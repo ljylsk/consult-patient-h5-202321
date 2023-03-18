@@ -1,18 +1,37 @@
-<script setup lang="ts"></script>
+<!-- 药品订单详情页面组件 -->
+
+<script setup lang="ts">
+import { useOrderDetail } from '@/composable'
+import { useRoute, useRouter } from 'vue-router'
+import OrderMedical from '@/views/Order/components/OrderMedical.vue'
+
+// 获取当前路由地址
+const route = useRoute()
+// 调用useOrderDetail方法，获取药品订单详情信息order，并传入实参订单id，从当前路由地址上获取
+// 当前页面路由地址是 http://localhost:5173/order/6876900575989760 所以是 route.params.id 而不是 route.query.id
+const { order } = useOrderDetail(route.params.id as string)
+
+const router = useRouter()
+</script>
 
 <template>
-  <div class="order-detail-page">
+  <!-- 如果药品订单信息详情order存在，才显示以下内容。因为order是在组件挂载完成后才开始获取 -->
+  <div class="order-detail-page" v-if="order">
     <cp-nav-bar title="药品订单详情" />
     <div class="order-head">
       <div class="card">
-        <div class="logistics">
-          <p>【东莞市】您的包裹已由物流公司揽收</p>
-          <p>2019-07-14 17:42:12</p>
+        <div class="logistics" @click="router.push(`/order/logistics/${order?.id}`)">
+          <!-- 物流最新位置 -->
+          <p>{{ order.expressInfo.content }}</p>
+          <!-- 物流最新时间 -->
+          <p>{{ order.expressInfo.time }}</p>
         </div>
         <van-icon name="arrow" />
       </div>
     </div>
-    <div class="order-medical">
+
+    <!-- 药品支付页面OrderPay.vue也会使用下面这段代码，所以封装成药品订单列表组件复用。详见OrderMedical.vue -->
+    <!-- <div class="order-medical">
       <div class="head">
         <h3>优医药房</h3>
         <small>优医质保 假一赔十</small>
@@ -32,17 +51,21 @@
         </div>
         <div class="desc">用法用量：口服，每次1袋，每天3次，用药3天</div>
       </div>
-    </div>
+    </div> -->
+    <!-- 药品订单列表组件 -->
+    <!-- 传入处方的药品信息，供子组件OrderMedical.vue内使用 -->
+    <order-medical :medicines="order.medicines"></order-medical>
+
     <div class="order-detail">
       <van-cell-group>
-        <van-cell title="药品金额" value="￥50" />
-        <van-cell title="运费" value="￥4" />
-        <van-cell title="优惠券" value="-￥0" />
-        <van-cell title="实付款" value="￥54" class="price" />
-        <van-cell title="订单编号" value="202201127465" />
-        <van-cell title="创建时间" value="2022-01-23 09:23:46" />
-        <van-cell title="支付时间" value="2022-01-23 09:23:46" />
-        <van-cell title="支付方式" value="支付宝支付" />
+        <van-cell title="药品金额" :value="`￥${order.payment}`" />
+        <van-cell title="运费" :value="`￥${order.expressFee}`" />
+        <van-cell title="优惠券" :value="`-￥${order.couponDeduction}`" />
+        <van-cell title="实付款" :value="`￥${order.actualPayment}`" class="price" />
+        <van-cell title="订单编号" :value="`￥${order.orderNo}`" />
+        <van-cell title="创建时间" :value="order.createTime" />
+        <van-cell title="支付时间" :value="order.payTime" />
+        <van-cell title="支付方式" :value="order.paymentMethod === 1 ? '支付宝支付' : '微信支付'" />
       </van-cell-group>
     </div>
     <!-- 已取消 -->
@@ -134,7 +157,7 @@
     }
   }
 }
-.order-medical {
+/* .order-medical {
   background-color: #fff;
   padding: 0 15px;
   .head {
@@ -202,7 +225,7 @@
       color: var(--cp-tip);
     }
   }
-}
+} */
 .van-action-bar {
   padding: 0 10px;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);

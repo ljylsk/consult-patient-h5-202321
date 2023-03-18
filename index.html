@@ -9,5 +9,12 @@
   <body>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
+    <!-- 在html页面引入JS脚本包(data-appid属性值为申请接入QQ登录时获得的appid；data-redirecturi属性值为申请接入QQ登录时输入的回调地址) -->
+    <script
+      src="https://connect.qq.com/qc_jssdk.js"
+      data-appid="102015968"
+      data-redirecturi="http://consult-patients.itheima.net/login/callback"
+    ></script>
+
   </body>
 </html>

@@ -1,10 +1,12 @@
 // 逻辑复用
 
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { cancelOrder, deleteOrder, followTarget, getPrescriptionPic } from '@/services/consult'
 import type { ConsultOrderItem, FollowType } from '@/types/consult'
 import { showFailToast, showImagePreview, showSuccessToast } from 'vant'
 import { OrderState } from '@/enums'
+import type { OrderDetail } from '@/types/order'
+import { getMedicalOrderDetail } from '@/services/order'
 
 // 封装 + 关注 / 已关注 按钮的逻辑：
 export const useFollow = (type: FollowType) => {
@@ -149,4 +151,18 @@ export const useDeleteOrder = (callback: () => void) => {
   }
   // 返回变量deleteLoading和函数deleteConsultOrder
   return { loading, deleteConsultOrder }
+}
+
+// 封装获取药品订单详情信息的逻辑：
+export const useOrderDetail = (id: string) => {
+  // 定义药品订单详情信息的响应式数据
+  const order = ref<OrderDetail>()
+  // 组件挂载时调用~
+  onMounted(async () => {
+    // 调用接口获取药品订单详情信息，请求参数id为订单id，从路由地址上获取
+    const res = await getMedicalOrderDetail(id)
+    order.value = res.data
+  })
+  // 返回变量order药品订单详情信息
+  return { order }
 }
