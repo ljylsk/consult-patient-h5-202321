@@ -156,7 +156,7 @@ router.beforeEach((to) => {
   // return '路由地址' => 拦截到某个页面
   const store = useUserStore()
   // 白名单
-  const whiteList = ['/login', '/login/callback'] // 登录页和QQ快捷登录页(与index.html文件中引入QQ登录需要的JS SDK的JS脚本包的data-redirecturi属性值一致)
+  const whiteList = ['/login', '/login/callback'] // 登录页面@/views/Login/index.vue和和用户授权QQ登录后手机未绑定时跳转的页面@/views/Login/LoginCallback.vue(与index.html文件中引入QQ登录需要的JS SDK的JS脚本包的data-redirecturi属性值一致)
   // 需求：当未登录即没有token 且 当前页面不是登录页 拦截到登录页
   if (!store.user?.token && !whiteList.includes(to.path)) return '/login'
 })

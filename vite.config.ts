@@ -11,6 +11,9 @@ import { VantResolver } from 'unplugin-vue-components/resolvers' // Vant解析�
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import path from 'path'
 
+// 导入一个用于处理html的vite插件
+import { createHtmlPlugin } from 'vite-plugin-html'
+
 // https://vitejs.dev/config/
 export default defineConfig({
   // base: '/', // 项目的基础路径前缀 默认是 '/'
@@ -18,12 +21,13 @@ export default defineConfig({
   // QQ第三方登录需要将端口改为80(服务器默认的端口是5173，pnpm dev启动服务器时会看到)。另需要在 C:\Windows\System32\drivers\etc 下hosts文件中加入  127.0.0.1       consult-patients.itheima.net。将127.0.0.1域名映射成QQ登录备案的网站域名才可在用户授权QQ登录后成功跳转至网站回调地址/login/callback，否则会出现无法访问此网站的提示，拒绝连接请求。注： ICP备案对应的网站域名和网站回调地址都是在将申请QQ登录接入网站应用及移动应用前要填写的
   server: {
     port: 80, // 服务器启动的端口号
-    host: true
+    host: true // 主机
     // open: true // 服务器启动时自动打开浏览器
   },
 
+  // 解析单文件组件的插件
   plugins: [
-    // 解析单文件组件的插件
+    createHtmlPlugin(),
     vue({
       // Props解构默认值时，需要显式地选择开启响应式语法糖
       reactivityTransform: true

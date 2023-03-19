@@ -8,7 +8,7 @@ import { request } from '@/utils/request'
 export const loginByPassword = (mobile: string, password: string) =>
   request<User>('login/password', 'post', { mobile, password })
 
-// 发送验证码接口
+// 获取手机验证码接口
 export const sendMobileCode = (mobile: string, type: CodeType) =>
   request('code', 'get', { mobile, type })
 
@@ -34,6 +34,10 @@ export const deletePatient = (id: string) => request(`patient/del/${id}`, 'delet
 // 问诊-查询患者详情接口
 export const getPatientDetail = (id: string) => request<Patient>(`patient/info/${id}`)
 
-// qq三方登录
+// 登录--三方登录--qq三方登录接口
 export const loginByQQ = (openId: string) =>
   request<User>('login/thirdparty', 'POST', { openId, source: 'qq' })
+
+// 登录--绑定用户新-三方登录绑定手机号接口
+export const bindMobile = (data: { mobile: string; code: string; openId: string }) =>
+  request<User>('login/binding', 'POST', data)

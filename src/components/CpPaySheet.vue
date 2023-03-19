@@ -35,7 +35,10 @@ const pay = async () => {
       // 订单id
       orderId: props.orderId, // 会提示不能将类型"string | undefined"分配给类型string。所以需要类型守卫if(orderId.value){}
       // 支付成功后跳转的地址
-      payCallback: props.payCallback
+      // 因为服务器监听的端口号是5173(pnpm dev启动服务器后可查看到。但是后面为了在用户授权QQ登录后能跳转回本地系统而不是QQ，在vite.config.ts中把端口号改成了HTTP协议服务器的默认端口号80)，所以浏览器访问的端口号也要是5173，如果地址不一致会导致无法访问。不写端口号的话，HTTP协议，服务器的默认端口号为80
+      // payCallback: 'http://localhost:5173' + props.payCallback //  http协议。localhost:本地服务器，是一个域名。5173是端口号。
+      // 为了同时满足开发环境和生产环境，将'http://localhost:5173'改为import.meta.env.VITE_APP_CALLBACK。
+      payCallback: import.meta.env.VITE_APP_CALLBACK + props.payCallback // 当是开发环境时，import.meta.env.VITE_APP_CALLBACK为.env.development文件中的环境变量VITE_APP_CALLBACK的值；当是生产环境时，import.meta.env.VITE_APP_CALLBACK为.env.production文件中的环境变量VITE_APP_CALLBACK的值
     })
     // 跳转到支付的url 没有使用路由跳转 而是原生的浏览器跳转
     window.location.href = res.data.payUrl // window.location.href 不仅可以获取当前地址，还可以赋予新的地址

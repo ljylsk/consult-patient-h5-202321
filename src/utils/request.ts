@@ -9,7 +9,7 @@ import { useUserStore } from '@/stores'
 import axios, { type Method } from 'axios'
 import { showToast } from 'vant' // 局部引入vant4组件库中的showToast函数
 
-const baseURL = 'https://consult-api.itheima.net/'
+const baseURL = 'https://consult-api.itheima.net/' // 访问本地API接口获取数据时使用的基础地址，详见接口文档。所以不需要区分是开发环境还是生产环境的地址
 // 1.1 创建新axios实例
 const instance = axios.create({
   // 基础地址

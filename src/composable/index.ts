@@ -1,12 +1,14 @@
 // 逻辑复用
 
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted, type Ref } from 'vue'
 import { cancelOrder, deleteOrder, followTarget, getPrescriptionPic } from '@/services/consult'
 import type { ConsultOrderItem, FollowType } from '@/types/consult'
-import { showFailToast, showImagePreview, showSuccessToast } from 'vant'
+import { showFailToast, showImagePreview, showSuccessToast, type FormInstance } from 'vant'
 import { OrderState } from '@/enums'
 import type { OrderDetail } from '@/types/order'
 import { getMedicalOrderDetail } from '@/services/order'
+import { sendMobileCode } from '@/services/user'
+import type { CodeType } from '@/types/user'
 
 // 封装 + 关注 / 已关注 按钮的逻辑：
 export const useFollow = (type: FollowType) => {
@@ -165,4 +167,44 @@ export const useOrderDetail = (id: string) => {
   })
   // 返回变量order药品订单详情信息
   return { order }
+}
+
+// 封装发送验证码的逻辑：
+export const useMobileCode = (mobile: Ref<string>, type: CodeType) => {
+  // 注：鼠标放在 const mobile = ref('') 的mobile上，显示mobile的TS类型为Ref<string>
+  // 1. API接口调用函数
+  // 2. 发送短信验证码：判断是否正在倒计时 校验手机号 调用短信验证码接口
+  // 3. 调用接口成功，倒计时，组件销毁要清理定时器
+  // 定义倒计时时间的响应式数据，默认为0
+  const time = ref(0)
+  // 定义定时器个数的变量
+  let timeId: number
+  // 通过 ref 可以获取到 Form 实例
+  const form = ref<FormInstance | null>(null)
+  const send = async () => {
+    // 正在倒计时，time大于0，此时不能发送验证码，直接返回
+    if (time.value > 0) return
+
+    // 校验手机号
+    // 通过 ref 可以获取到 Form 实例并调用实例方法validate来校验name属性值为mobile的手机号输入框。调用validate方法的返回值是Promise
+    await form.value?.validate('mobile') // form.value.之后没有提示表单实例的各种方法，是因为没有给Form实例添加TS类型。Ctrl+鼠标左键点击van-form标签来查看Form实例的TS类型 => FormInstance
+
+    // 手机号校验成功后调用获取手机验证码接口，参数为手机号和验证码类型
+    await sendMobileCode(mobile.value, type) // 当输入''时会自动出现参数type的所有可选项
+
+    // 开启倒计时
+    time.value = 60
+    clearInterval(timeId)
+    timeId = setInterval(() => {
+      time.value--
+      if (time.value <= 0) clearInterval(timeId)
+    }, 1000)
+  }
+  // 组件实例被卸载之后调用onUnmounted函数
+  onUnmounted(() => {
+    // 清除定时器
+    clearInterval(timeId)
+  })
+
+  return { form, send, time }
 }
