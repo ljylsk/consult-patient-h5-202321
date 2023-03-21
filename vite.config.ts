@@ -32,7 +32,7 @@ export default defineConfig({
     // mock生成随机数据的插件
     viteMockServe({
       mockPath: './src/mock', // 扫描./src/mock文件夹下的文件，mock接口的代码写在mock文件夹下的文件中
-      localEnabled: true // 开发环境下开启
+      localEnabled: true // 开发环境下开启mock
     }),
     // 修改index.html
     createHtmlPlugin(),

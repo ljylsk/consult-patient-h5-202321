@@ -14,11 +14,11 @@ const rules: MockMethod[] = [
       for (let i = 0; i < 10; i++) {
         data.push(
           Mock.mock({
-            id: '@id',
-            avatar: '@image("100x100")',
-            title: '@ctitle(3,10)',
-            lastContent: '@ctitle(10,40)',
-            sendTime: '@datetime()'
+            id: '@id', // 随机id
+            avatar: '@image("100x100")', // 随机图片
+            title: '@ctitle(3,10)', // 随机中文标题
+            lastContent: '@ctitle(10,40)', // 随机中文标题
+            sendTime: '@datetime()' // 随机日期时间
           })
         )
       }

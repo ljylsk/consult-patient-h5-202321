@@ -105,7 +105,7 @@ const url = encodeURIComponent(import.meta.env.VITE_APP_CALLBACK + '/login/callb
 
 // 测试mock接口
 axios.get('/patient/message/list').then((res) => console.log('mock生成的随机数据', res))
-// 为何用axios而不是request发请求？如果用request发请求前面有完整的域名 baseURL(https://consult-api.itheima.net/)，直接走那个服务器，不会走通过 npm run dev 启动的本地服务器，拿不到模拟数据mock
+// 为何用axios而不是request发请求？如果用request发请求前面有完整的域名 baseURL(https://consult-api.itheima.net/)，直接走那个服务器，不会走通过 npm run dev 启动的本地服务器，拿不到模拟数据
 </script>
 
 <template>
