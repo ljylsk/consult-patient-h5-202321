@@ -9,6 +9,7 @@ import { loginByPassword, loginByCode } from '@/services/user'
 import { useUserStore } from '@/stores'
 import { useRouter, useRoute } from 'vue-router'
 import { useMobileCode } from '@/composable'
+import axios from 'axios'
 
 // 定义控制复选框勾选状态的响应式数据
 const agree = ref(false)
@@ -101,6 +102,10 @@ onMounted(() => {
 // 以上放置QQ登录按钮的逻辑是为了拿到点击QQ登录按钮时跳转的链接(https://graph.qq.com/oauth2.0/authorize?client_id=102015968&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fconsult-patients.itheima.net%2Flogin%2Fcallback)【点击登录按钮后，在谷歌开发者工具的元素面板中查看id为qq的div标签下的a标签的onclick属性值中有跳转的链接】，复制该链接后删除上述放置QQ登录按钮的逻辑代码，改成自己的图片外的 a 标签的 href 跳转即可，不要QQ登录按钮。开发中是在电脑上测试的，使用QQ登录无法与手机上的QQ关联，所以把谷歌手机模拟器关闭，换成PC模拟器，使用手机QQ扫码进行登录，走通接下来的流程
 // 对 https://graph.qq.com/oauth2.0/authorize?client_id=102015968&response_type=token&scope=all&redirect_uri=http%3A%2F%2Fconsult-patients.itheima.net%2Flogin%2Fcallback 中的 http%3A%2F%2Fconsult-patients.itheima.net%2Flogin%2Fcallback 进行开发环境和生产环境的区分，并转码。注：/login/callback 为申请接入QQ登录时输入的回调地址即用户授权QQ登录后跳转的地址
 const url = encodeURIComponent(import.meta.env.VITE_APP_CALLBACK + '/login/callback') // encodeURIComponent() 函数可把字符串作为 URI 组件进行编码
+
+// 测试mock接口
+axios.get('/patient/message/list').then((res) => console.log('mock生成的随机数据', res))
+// 为何用axios而不是request发请求？如果用request发请求前面有完整的域名 baseURL(https://consult-api.itheima.net/)，直接走那个服务器，不会走通过 npm run dev 启动的本地服务器，拿不到模拟数据mock
 </script>
 
 <template>

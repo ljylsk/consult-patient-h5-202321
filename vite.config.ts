@@ -14,6 +14,9 @@ import path from 'path'
 // 导入一个用于处理html的vite插件
 import { createHtmlPlugin } from 'vite-plugin-html'
 
+// 导入mock生成随机数据的插件
+import { viteMockServe } from 'vite-plugin-mock'
+
 // https://vitejs.dev/config/
 export default defineConfig({
   // base: '/', // 项目的基础路径前缀 默认是 '/'
@@ -25,9 +28,15 @@ export default defineConfig({
     // open: true // 服务器启动时自动打开浏览器
   },
 
-  // 解析单文件组件的插件
   plugins: [
+    // mock生成随机数据的插件
+    viteMockServe({
+      mockPath: './src/mock', // 扫描./src/mock文件夹下的文件，mock接口的代码写在mock文件夹下的文件中
+      localEnabled: true // 开发环境下开启
+    }),
+    // 修改index.html
     createHtmlPlugin(),
+    // 解析单文件组件的插件
     vue({
       // Props解构默认值时，需要显式地选择开启响应式语法糖
       reactivityTransform: true

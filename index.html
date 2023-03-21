@@ -16,11 +16,16 @@
       data-appid="102015968"
       data-redirecturi="http://consult-patients.itheima.net/login/callback"
     ></script> -->
+    <!-- 使用 vite-plugin-html 插件解析模板，默认支持 ejs 模板引擎语法 -->
     <script
       src="https://connect.qq.com/qc_jssdk.js"
       data-appid="102015968"
       data-redirecturi="<%=VITE_APP_CALLBACK%>/login/callback"
     ></script>
-
+    <!-- 如果是开发环境，才使用Eruda手机调试面板工具 -->
+    <% if(DEV){ %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/eruda/2.4.1/eruda.min.js"></script>
+    <script>eruda.init()</script>
+    <% } %>
   </body>
 </html>
