@@ -195,7 +195,8 @@ export const useMobileCode = (mobile: Ref<string>, type: CodeType) => {
     // 开启倒计时
     time.value = 60
     clearInterval(timeId)
-    timeId = setInterval(() => {
+    timeId = window.setInterval(() => {
+      // window.setInterval...不能省略window，否则会提示：不能将类型“Timer”分配给类型“number”。
       time.value--
       if (time.value <= 0) clearInterval(timeId)
     }, 1000)
