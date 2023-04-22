@@ -27,8 +27,8 @@ const onClickLeft = () => {
   if (props.back) return props.back()
 
   // 如果父组件没有传back函数，执行下面的逻辑
+  // Vue Router 将信息保存在 history.state 上
   if (history.state?.back) {
-    // Vue Router 将信息保存在 history.state 上
     // 如果历史记录中有回退
     router.back() // 返回上一级
   } else {
@@ -61,7 +61,7 @@ const onClickRight = () => {
 </template>
 
 <style lang="scss" scoped>
-// 样式穿透
+// 样式穿透/深度作用其他组件样式 :deep(){ // 样式 } 或 ::v-deep(){ // 样式 }
 ::v-deep() {
   /*
   .van-nav-bar__arrow {
