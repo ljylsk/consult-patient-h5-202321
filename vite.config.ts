@@ -41,9 +41,10 @@ export default defineConfig({
       // Props解构默认值时，需要显式地选择开启响应式语法糖
       reactivityTransform: true
     }),
-    // 自动导入组件的插件 解析器可以是 vant element and-vue等等 且自动导入src/components文件夹下的组件，不需import ~ 直接使用
+    // 配置组件自动注册的插件 且默认src/components文件夹下的组件也会自动注册，不需import ~ 直接使用
     Components({
-      dts: false, // 默认是 true 开启自动生成组件的类型声明文件，vant组件已经有类型声明文件，只要导入了就会使用类型声明
+      dts: false, // 默认是 true 开启自动生成组件的类型声明文件，但是vant组件自带类型声明文件，导入组件后就能识别
+      // 配置解析器(Vant UI 组件库的解析器) 解析器可以是 vant element and-vue等等
       resolvers: [VantResolver({ importStyle: false })] // 在main.ts文件中已经引入了vant组件库的所有样式，不需要自动导入vant组件样式，只需要自动导入vant组件即可
     }),
     // 创建SVG精灵
