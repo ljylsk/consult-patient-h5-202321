@@ -6,6 +6,9 @@
 </script>
 
 <template>
+  <!-- mount API 变化：vue2中App组件替换#app容器；vue3中App组件插入#app容器 -->
+  <!-- 所以，这里不需要类名为app的div标签包裹，会重复 <div class="app"></div> -->
+
   <!-- 使用 Vant 4 组件Button -->
   <!-- 组件的属性【如type】的属性值的可选结果通过快捷键Ctrl+i展示 -->
   <!-- <van-button type="primary">vant按钮</van-button> -->
