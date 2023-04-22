@@ -1,6 +1,6 @@
 // 项目共用样式文件
 
-// 定义css变量
+// 定义全局css变量 使用场景：项目主题
 :root {
   // 优医问诊项目色板
   --cp-primary: #16C2A3;
@@ -20,15 +20,19 @@
   // Vant 4 => 基础组件 => ConfigProvider 全局配置 => 主题变量 => 变量列表 查找主题变量
   --van-primary-color: var(--cp-primary); // var()是固定格式
   // 应用二：修改各个组件内除vant组件的其他标签的css变量(各种颜色)，详见各个组件的style标签内的样式
-
+  
   // Vant 4 组件的主题定制：修改样式变量的值 => 自定义样式
   // Vant 4 组件 Cell 单元格
   --van-cell-vertical-padding: 14px; // 单元格上下间距
   // Vant 4 组件 Checkbox 复选框
-  --van-checkbox-size: 14px // 复选框大小
+  --van-checkbox-size: 14px; // 复选框大小
   // Vant 4 组件 Button 按钮
-  --van-button-normal-font-size: 16px // 按钮内文字默认大小
+  --van-button-normal-font-size: 16px; // 按钮内文字默认大小
 }
+// 定义局部css变量 使用场景：组件变量 如只有类名footer的标签上才能使用
+// .footer {
+//   --footer-color: #f40
+// }
 
 // 全局样式
 body {
