@@ -6,7 +6,7 @@
 
 import router from '@/router'
 import { useUserStore } from '@/stores'
-import axios, { type Method } from 'axios'
+import axios, { AxiosError, type Method } from 'axios'
 import { showToast } from 'vant' // 局部引入vant4组件库中的showToast函数
 
 const baseURL = 'https://consult-api.itheima.net/' // 访问本地API接口获取数据时使用的基础地址，详见接口文档。所以不需要区分是开发环境还是生产环境的地址
@@ -35,23 +35,23 @@ instance.interceptors.request.use(
 // 1.3 响应拦截器
 instance.interceptors.response.use(
   (res) => {
-    // 状态码200是响应成功的，res.data.code是10000业务逻辑成功
-    // 如果不是10000，业务逻辑失败，使用vant组件库中的Toast轻提示，报错阻断程序
+    // 响应成功(状态码200)...
+    // res.data.code是10000业务逻辑成功，如果不是10000，业务逻辑失败【如登录时将密码改错】，使用vant组件库中的Toast轻提示，报错阻断程序
     if (res.data?.code !== 10000) {
-      showToast(res.data?.message || '网络异常') // vant4中Toast轻提示 => 调用showToast函数
+      showToast(res.data?.message || '网络异常') // Vant 4中Toast轻提示 => 调用showToast函数
       return Promise.reject(res.data)
     }
-    // 业务逻辑成功，剥离返回的无效的响应数据
+    // 业务逻辑成功【响应成功，且后台业务操作完毕】，剥离返回的无效的响应数据
     return res.data
   },
-  (err) => {
-    // 响应出错
-    // 401跳转登录
-    if (err.response.status === 401) {
-      // 删除用户信息
+  (err: AxiosError) => {
+    // 响应出错...
+    // 401时跳转至登录页
+    if (err.response?.status === 401) {
       const store = useUserStore()
+      // 删除用户信息
       store.delUser()
-      // 跳转到登录页，带上接口失效所在页面的地址，后续登录页面登录完成后回跳使用
+      // 跳转到登录页，带上接口失效所在页面的地址(包含参数)，后续登录页面登录成功后回跳使用
       router.push(`/login?returnUrl=${router.currentRoute.value.fullPath}`) // push是router方法，以编程方式导航到一个新的 URL。currentRoute是router属性，表示当前路由地址，只读。是使用 ref 创建的数据，js 中使用需要加 .value。fullPath包括 path、 query 和 hash
     }
     return Promise.reject(err)
@@ -68,13 +68,13 @@ type Data<T> = {
 // 2. 通用的请求工具函数
 const request = <T>(
   url: string,
-  method: Method = 'get', // method请求方式默认为get
+  method: Method = 'GET', // method请求方式默认为get
   submitData?: object // 参数后面加?表示可选参数
 ) => {
-  return instance.request<T, Data<T>>({
-    // 若传{id: '111'}，则res是 res= {data: {id: '111'}}。但是响应拦截器中返回了res.data，所以request<数据类型, 数据类型>()指定res.data的类型
-    url,
-    method,
+  return instance.request<any, Data<T>>({
+    // 若传{id: '111'}，则res是 res= {data: {id: '111'}}。但是响应拦截器中响应数据返回的是res.data，自定义响应数据后，采用泛型第二个参数设置即可，即request<类型参数, 类型参数>()指定res.data的类型
+    url, // url: url 简写为 url
+    method, // method: method 简写为 method
     // 区分get和其他请求
     // get请求提交数据时选项用params，其他请求提交数据时选项用data
     [method.toLowerCase() === 'get' ? 'params' : 'data']: submitData
