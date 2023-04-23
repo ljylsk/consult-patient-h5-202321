@@ -19,7 +19,7 @@ defineProps<{
 .cp-icon {
   // 通过 font-size 控制字体图标大小
   // 通过 width 和 height 控制图片大小 svg文件不是字体图标是图片
-  width: 1em; // em 相对单位 相当于父元素的font-size
+  width: 1em; // em 相对单位 相当于当前元素的font-size
   height: 1em;
 }
 </style>
