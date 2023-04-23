@@ -149,17 +149,19 @@ const router = createRouter({
 })
 
 // 全局前置守卫 - 访问权限控制
+// return false => 取消
+// return true 或 不return => 直接放行
+// return '路由地址' => 拦截到某个页面
 router.beforeEach((to) => {
   // 开启进度条
   NProgress.start()
-  // return true 或 不return => 直接放行
-  // return '路由地址' => 拦截到某个页面
+  // 获取用户状态仓库
   const store = useUserStore()
-  // 白名单
-  const whiteList = ['/login', '/login/callback'] // 登录页面@/views/Login/index.vue和和用户授权QQ登录后手机未绑定时跳转的页面@/views/Login/LoginCallback.vue(与index.html文件中引入QQ登录需要的JS SDK的JS脚本包的data-redirecturi属性值一致)
-  // 需求：当未登录即没有token 且 当前页面不是登录页 拦截到登录页
+  // 定义白名单
+  const whiteList = ['/login', '/login/callback'] // 登录页面@/views/Login/index.vue和用户授权QQ登录后手机未绑定时跳转的页面@/views/Login/LoginCallback.vue(与index.html文件中引入QQ登录需要的JS SDK的JS脚本包的data-redirecturi属性值一致)
+  // 当前未登录即没有token 且 即将跳转的页面不在白名单 拦截到登录页
   if (!store.user?.token && !whiteList.includes(to.path)) return '/login'
-})
+}) // includes() 方法用来判断一个数组是否包含一个指定的值，根据情况，如果包含则返回 true，否则返回 false
 
 // 全局后置钩子
 router.afterEach((to) => {
