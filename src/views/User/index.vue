@@ -29,8 +29,11 @@ const tools = [
   { label: '设置', path: '/' }
 ]
 
+// 获取用户状态仓库
 const store = useUserStore()
+// 获取路由器实例。相当于在模板中使用 $router
 const router = useRouter()
+// 定义 退出登录 的点击事件的事件处理函数
 const logout = () => {
   // Vant 4 组件 Dialog 弹出框
   showConfirmDialog({
@@ -48,10 +51,23 @@ const logout = () => {
       // on cancel
     })
 }
+/* // 也可以使用await/async方式，如下：
+const logout = async () => {
+  // Vant 4 组件 Dialog 弹出框
+  await showConfirmDialog({
+    title: '温馨提示',
+    message: '您是否确认退出优医问诊'
+  })
+  // 点击确认
+  // 清除用户信息
+  store.delUser()
+  // 跳转到登录页
+  router.push('/login')
+} */
 </script>
 
 <template>
-  <!-- 由于user可能为undefined，user?.头像用户名手机号等都要加?。为了方便起见，在类名为user-page的div标签上添加v-if属性，属性值为user，如果user为undefined，标签的所有内容将不会渲染 -->
+  <!-- 由于user可能为undefined，user?.头像或用户名或手机号等都要加?。为了方便起见，在类名为user-page的div标签上添加v-if属性，属性值为user，如果user为undefined，标签包裹的所有内容将不会渲染 -->
   <div class="user-page" v-if="user">
     <!-- 用户 -->
     <div class="user-page-head">
@@ -88,9 +104,11 @@ const logout = () => {
         <h3>药品订单</h3>
         <router-link to="/order">全部订单 <van-icon name="arrow" /></router-link>
       </div>
+      <!-- Vant 4 组件 Layout 布局 -->
       <van-row>
         <van-col span="6">
-          <!-- 如果待付款为0，则不显示徽标0，使用逻辑或||。如果user.orderInfo.paidNumber待付款为0，表示false，则运算符号右边的''，因为''表示true，直接输出'' -->
+          <!-- Vant 4 组件 Badge 徽标 -->
+          <!-- 如果待付款为0，则不显示徽标0，使用逻辑或||。如果user.orderInfo.paidNumber待付款为0，表示false，则取运算符号||右边的''，因为''表示true，直接输出'' -->
           <van-badge :content="user.orderInfo.paidNumber || ''">
             <cp-icon name="user-paid" />
           </van-badge>
